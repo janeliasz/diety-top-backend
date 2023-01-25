@@ -28,4 +28,19 @@ public class PatientService {
     public Patient edit(Patient newPatient) {
         return patient = newPatient;
     }
+
+    public boolean validate(Patient patient) {
+        return (
+            !patient.getName().isEmpty() &&
+            !patient.getSurname().isEmpty() &&
+            (patient.getSex().equals("m") || patient.getSex().equals("f")) &&
+            patient.getWeight() > 0 &&
+            patient.getHeight() > 0 &&
+            patient.getGlucose() > 0 &&
+            patient.getMagnesium() > 0 &&
+            patient.getCalcium() > 0 &&
+            patient.getIron() > 0 &&
+            (patient.getActivity().equals("low") || patient.getActivity().equals("medium") || patient.getActivity().equals("high"))
+        );
+    }
 }
