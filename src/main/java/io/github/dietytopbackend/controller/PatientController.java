@@ -17,8 +17,8 @@ public class PatientController {
     @Autowired
     PatientService patientService;
 
-    @GetMapping()
-    public Patient getById(@RequestParam("id") int id) {
+    @GetMapping("/{id}")
+    public Patient getById(@PathVariable("id") int id) {
         return patientService.getById(id);
     }
 
@@ -31,13 +31,17 @@ public class PatientController {
         return ResponseEntity.ok().body(patientService.edit(newPatient).toString());
     }
 
+    @GetMapping("/{id}/exclusions")
+    public List<Product> getExclusions(@PathVariable("id") int id) {
+        return patientService.getPatientExclusions(id);
+    }
     @PostMapping("/{patientId}/exclusions/{productId}")
     public void excludeProduct(@PathVariable("patientId") int patientId, @PathVariable("productId") int productId) {
         patientService.excludeProduct(patientId, productId);
     }
 
-    @GetMapping("/{id}/exclusions")
-    public List<Product> getExclusions(@PathVariable("id") int id) {
-        return patientService.getPatientExclusions(id);
+    @DeleteMapping("/{patientId}/exclusions/{productId}")
+    public void includeProduct(@PathVariable("patientId") int patientId, @PathVariable("productId") int productId) {
+        patientService.includeProduct(patientId, productId);
     }
 }

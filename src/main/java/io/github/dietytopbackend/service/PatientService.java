@@ -47,6 +47,10 @@ public class PatientService {
         return getById(newPatient.getId());
     }
 
+    public List<Product> getPatientExclusions(int id) {
+        return getById(id).getExcludedProducts();
+    }
+
     public void excludeProduct(int patientId, int productId) {
         Patient patient = getById(patientId);
         Product product = productService.getById(productId);
@@ -56,6 +60,17 @@ public class PatientService {
         patient.getExcludedProducts().add(product);
         patientRepository.save(patient);
     }
+
+    public void includeProduct(int patientId, int productId) {
+        Patient patient = getById(patientId);
+        Product product = productService.getById(productId);
+
+        if (patient == null || product == null) return;
+
+        patient.getExcludedProducts().remove(product);
+        patientRepository.save(patient);
+    }
+
     public boolean validate(Patient patient) {
         return (
             !patient.getName().isEmpty() &&
@@ -69,9 +84,5 @@ public class PatientService {
             patient.getIron() > 0 &&
             (patient.getActivity().equals("low") || patient.getActivity().equals("medium") || patient.getActivity().equals("high"))
         );
-    }
-
-    public List<Product> getPatientExclusions(int id) {
-        return getById(id).getExcludedProducts();
     }
 }
