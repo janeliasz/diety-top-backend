@@ -1,12 +1,20 @@
 package io.github.dietytopbackend.service;
 
 import io.github.dietytopbackend.model.Patient;
+import io.github.dietytopbackend.repository.PatientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class PatientService {
 
-    Patient patient = new Patient(
+    PatientRepository patientRepository;
+
+    public PatientService(PatientRepository patientRepository) {
+        this.patientRepository = patientRepository;
+        this.patientRepository.save(new Patient(
             1,
             "Jan",
             "Kowalski",
@@ -19,14 +27,17 @@ public class PatientService {
             8.9,
             188.88,
             "medium"
-    );
+        ));
+    }
 
     public Patient getById(int id) {
-        return patient;
+        Optional<Patient> patient = patientRepository.findById(id);
+        return patient.isEmpty() ? null : patient.get();
     }
 
     public Patient edit(Patient newPatient) {
-        return patient = newPatient;
+        patientRepository.save(newPatient);
+        return getById(newPatient.getId());
     }
 
     public boolean validate(Patient patient) {
