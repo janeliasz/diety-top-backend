@@ -1,10 +1,13 @@
 package io.github.dietytopbackend.service;
 
 import io.github.dietytopbackend.model.Patient;
+import io.github.dietytopbackend.model.Product;
 import io.github.dietytopbackend.repository.PatientRepository;
+import io.github.dietytopbackend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -12,22 +15,26 @@ public class PatientService {
 
     PatientRepository patientRepository;
 
+    @Autowired
+    ProductService productService;
+
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
-        this.patientRepository.save(new Patient(
-            1,
-            "Jan",
-            "Kowalski",
-            "2001-04-22",
-            "m",
-            75,
-            185,
-            96.27,
-            2.4,
-            8.9,
-            188.88,
-            "medium"
-        ));
+        this.patientRepository.save(Patient.builder()
+            .id(1)
+            .name("Jan")
+            .surname("Kowalski")
+            .birthday("2001-04-22")
+            .sex("m")
+            .weight(75)
+            .height(185)
+            .glucose(96.27)
+            .magnesium(2.4)
+            .calcium(8.9)
+            .iron(188.88)
+            .activity("medium")
+            .build()
+        );
     }
 
     public Patient getById(int id) {
@@ -40,6 +47,15 @@ public class PatientService {
         return getById(newPatient.getId());
     }
 
+    public void excludeProduct(int patientId, int productId) {
+        Patient patient = getById(patientId);
+        Product product = productService.getById(productId);
+
+        if (patient == null || product == null) return;
+
+        patient.getExcludedProducts().add(product);
+        patientRepository.save(patient);
+    }
     public boolean validate(Patient patient) {
         return (
             !patient.getName().isEmpty() &&
@@ -53,5 +69,9 @@ public class PatientService {
             patient.getIron() > 0 &&
             (patient.getActivity().equals("low") || patient.getActivity().equals("medium") || patient.getActivity().equals("high"))
         );
+    }
+
+    public List<Product> getPatientExclusions(int id) {
+        return getById(id).getExcludedProducts();
     }
 }
