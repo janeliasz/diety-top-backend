@@ -4,6 +4,7 @@ import io.github.dietytopbackend.model.Product;
 import io.github.dietytopbackend.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,5 +37,9 @@ public class ProductService {
     public Product getById(int id) {
         Optional<Product> product = productRepository.findById(id);
         return product.isEmpty() ? null : product.get();
+    }
+
+    public List<Product> getByNameContaining(String name) {
+        return productRepository.findAllByNameContaining(name);
     }
 }
