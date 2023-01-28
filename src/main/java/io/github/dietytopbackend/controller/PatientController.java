@@ -28,13 +28,15 @@ public class PatientController {
             return ResponseEntity.badRequest().body("Validation failed.");
         }
 
-        return ResponseEntity.ok().body(patientService.edit(newPatient).toString());
+        patientService.edit(newPatient);
+        return ResponseEntity.ok().body("Successfully edited patient.");
     }
 
     @GetMapping("/{id}/exclusions")
     public List<Product> getExclusions(@PathVariable("id") int id) {
         return patientService.getPatientExclusions(id);
     }
+
     @PostMapping("/{patientId}/exclusions/{productId}")
     public void excludeProduct(@PathVariable("patientId") int patientId, @PathVariable("productId") int productId) {
         patientService.excludeProduct(patientId, productId);

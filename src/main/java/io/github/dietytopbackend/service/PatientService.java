@@ -3,7 +3,6 @@ package io.github.dietytopbackend.service;
 import io.github.dietytopbackend.model.Patient;
 import io.github.dietytopbackend.model.Product;
 import io.github.dietytopbackend.repository.PatientRepository;
-import io.github.dietytopbackend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +41,11 @@ public class PatientService {
         return patient.isEmpty() ? null : patient.get();
     }
 
-    public Patient edit(Patient newPatient) {
+    public void edit(Patient newPatient) {
+        Patient patient = getById(newPatient.getId());
+        newPatient.setExcludedProducts(patient.getExcludedProducts());
+
         patientRepository.save(newPatient);
-        return getById(newPatient.getId());
     }
 
     public List<Product> getPatientExclusions(int id) {
