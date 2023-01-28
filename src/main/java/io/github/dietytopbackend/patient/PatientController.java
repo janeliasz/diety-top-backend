@@ -1,8 +1,6 @@
-package io.github.dietytopbackend.controller;
+package io.github.dietytopbackend.patient;
 
-import io.github.dietytopbackend.model.Patient;
-import io.github.dietytopbackend.model.Product;
-import io.github.dietytopbackend.service.PatientService;
+import io.github.dietytopbackend.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

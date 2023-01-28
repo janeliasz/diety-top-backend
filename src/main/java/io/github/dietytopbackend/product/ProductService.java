@@ -1,7 +1,5 @@
-package io.github.dietytopbackend.service;
+package io.github.dietytopbackend.product;
 
-import io.github.dietytopbackend.model.Product;
-import io.github.dietytopbackend.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

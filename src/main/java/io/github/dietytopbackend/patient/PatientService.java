@@ -1,8 +1,7 @@
-package io.github.dietytopbackend.service;
+package io.github.dietytopbackend.patient;
 
-import io.github.dietytopbackend.model.Patient;
-import io.github.dietytopbackend.model.Product;
-import io.github.dietytopbackend.repository.PatientRepository;
+import io.github.dietytopbackend.product.Product;
+import io.github.dietytopbackend.product.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

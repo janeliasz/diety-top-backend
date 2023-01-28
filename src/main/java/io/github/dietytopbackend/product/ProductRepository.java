@@ -1,6 +1,6 @@
-package io.github.dietytopbackend.repository;
+package io.github.dietytopbackend.product;
 
-import io.github.dietytopbackend.model.Product;
+import io.github.dietytopbackend.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

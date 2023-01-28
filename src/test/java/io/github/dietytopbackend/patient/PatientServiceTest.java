@@ -1,8 +1,7 @@
-package io.github.dietytopbackend.service;
+package io.github.dietytopbackend.patient;
 
-import io.github.dietytopbackend.model.Patient;
-import io.github.dietytopbackend.model.Product;
-import io.github.dietytopbackend.repository.PatientRepository;
+import io.github.dietytopbackend.product.Product;
+import io.github.dietytopbackend.product.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

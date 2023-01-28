@@ -1,6 +1,7 @@
-package io.github.dietytopbackend.model;
+package io.github.dietytopbackend.patient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.github.dietytopbackend.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
