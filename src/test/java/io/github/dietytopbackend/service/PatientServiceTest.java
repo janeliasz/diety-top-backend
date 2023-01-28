@@ -1,6 +1,7 @@
 package io.github.dietytopbackend.service;
 
 import io.github.dietytopbackend.model.Patient;
+import io.github.dietytopbackend.model.Product;
 import io.github.dietytopbackend.repository.PatientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,14 +11,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PatientServiceTest {
 
     @Mock
     private PatientRepository patientRepository;
+
+    @Mock
+    private ProductService productService;
 
     @InjectMocks
     private PatientService patientService;
@@ -39,6 +47,7 @@ class PatientServiceTest {
             .calcium(8.9)
             .iron(188.88)
             .activity("medium")
+            .excludedProducts(new ArrayList<Product>(Arrays.asList(Product.builder().id(1).name("test").build())))
             .build();
     }
 
@@ -111,5 +120,41 @@ class PatientServiceTest {
         boolean validationResult = patientService.validate(patient);
 
         assertFalse(validationResult);
+    }
+
+    @Test
+    public void patientAndProductNotNull_excluded() {
+        when(patientRepository.findById(1)).thenReturn(Optional.ofNullable(patient));
+        when(productService.getById(1)).thenReturn(Product.builder()
+            .id(1)
+            .name("test")
+            .build()
+        );
+
+        boolean excluded = patientService.excludeProduct(1, 1);
+
+        assertTrue(excluded);
+        assertEquals(patient.getExcludedProducts().size(), 2);
+    }
+
+    @Test
+    public void patientNull_didNotExclude() {
+        when(patientRepository.findById(2)).thenReturn(Optional.ofNullable(null));
+
+        boolean excluded = patientService.excludeProduct(2, 1);
+
+        assertFalse(excluded);
+        assertEquals(patient.getExcludedProducts().size(), 1);
+    }
+
+    @Test
+    public void productNull_didNotExclude() {
+        when(patientRepository.findById(1)).thenReturn(Optional.ofNullable(patient));
+        when(productService.getById(2)).thenReturn(null);
+
+        boolean excluded = patientService.excludeProduct(1, 2);
+
+        assertFalse(excluded);
+        assertEquals(patient.getExcludedProducts().size(), 1);
     }
 }

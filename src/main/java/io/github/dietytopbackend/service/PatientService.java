@@ -3,7 +3,6 @@ package io.github.dietytopbackend.service;
 import io.github.dietytopbackend.model.Patient;
 import io.github.dietytopbackend.model.Product;
 import io.github.dietytopbackend.repository.PatientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,10 +15,9 @@ public class PatientService {
 
     PatientRepository patientRepository;
 
-    @Autowired
     ProductService productService;
 
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, ProductService productService) {
         this.patientRepository = patientRepository;
         this.patientRepository.save(Patient.builder()
             .id(1)
@@ -36,6 +34,8 @@ public class PatientService {
             .activity("medium")
             .build()
         );
+
+        this.productService = productService;
     }
 
     public Patient getById(int id) {
@@ -54,24 +54,26 @@ public class PatientService {
         return getById(id).getExcludedProducts();
     }
 
-    public void excludeProduct(int patientId, int productId) {
+    public boolean excludeProduct(int patientId, int productId) {
         Patient patient = getById(patientId);
         Product product = productService.getById(productId);
 
-        if (patient == null || product == null) return;
+        if (patient == null || product == null) return false;
 
         patient.getExcludedProducts().add(product);
         patientRepository.save(patient);
+        return true;
     }
 
-    public void includeProduct(int patientId, int productId) {
+    public boolean includeProduct(int patientId, int productId) {
         Patient patient = getById(patientId);
         Product product = productService.getById(productId);
 
-        if (patient == null || product == null) return;
+        if (patient == null || product == null) return false;
 
         patient.getExcludedProducts().remove(product);
         patientRepository.save(patient);
+        return true;
     }
 
     public boolean validate(Patient patient) {
