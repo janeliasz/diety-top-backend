@@ -6,8 +6,10 @@ import io.github.dietytopbackend.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class PatientService {
@@ -73,9 +75,13 @@ public class PatientService {
     }
 
     public boolean validate(Patient patient) {
+        Pattern regexPattern = Pattern.compile("^[a-z ,.'-]+$", Pattern.CASE_INSENSITIVE);
+        LocalDate birthday = LocalDate.parse(patient.getBirthday());
+
         return (
-            !patient.getName().isEmpty() &&
-            !patient.getSurname().isEmpty() &&
+            !patient.getName().isEmpty() && regexPattern.matcher(patient.getName()).matches() &&
+            !patient.getSurname().isEmpty() && regexPattern.matcher(patient.getSurname()).matches() &&
+            !birthday.isBefore(LocalDate.parse("1900-01-01")) && !birthday.isAfter(LocalDate.now()) &&
             (patient.getSex().equals("m") || patient.getSex().equals("f")) &&
             patient.getWeight() > 0 &&
             patient.getHeight() > 0 &&
